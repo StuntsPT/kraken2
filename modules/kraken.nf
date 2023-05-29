@@ -17,11 +17,16 @@ process kraken2 {
     script:
     input = params.single_end ? "\"$reads\"" :  "--paired \"${reads[0]}\" \"${reads[1]}\""
     report_zero_counts = params.report_zero_counts ? "--report-zero-counts" : ""
+    classified_reads = params.classified_out ? "--classified-out" : "${id}_"params.classified_out
+    unclassified_reads = params.unclassified_out ? "--unclassified-out" : "${id}_"params.unclassified_out
+
     """
     kraken2 \
         --db $kraken2_db \
         --threads ${task.cpus} \
         $report_zero_counts \
+        $classified_reads \
+        $unclassified_reads \
         --report ${id}.kraken2.report \
         $input > /dev/null
 
