@@ -17,8 +17,8 @@ process kraken2 {
     script:
     input = params.single_end ? "\"$reads\"" :  "--paired \"${reads[0]}\" \"${reads[1]}\""
     report_zero_counts = params.report_zero_counts ? "--report-zero-counts" : ""
-    classified_reads = params.classified_out ? "--classified-out " + outdir + "/${id}_" + params.classified_out : ""
-    unclassified_reads = params.unclassified_out ? "--unclassified-out " + outdir + "/${id}_" + params.unclassified_out : ""
+    classified_reads = params.classified_out ? "--classified-out " + params.outdir + "/${id}_" + params.classified_out : ""
+    unclassified_reads = params.unclassified_out ? "--unclassified-out " + params.outdir + "/${id}_" + params.unclassified_out : ""
 
     """
     kraken2 \
