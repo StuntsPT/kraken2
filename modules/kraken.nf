@@ -13,12 +13,16 @@ process kraken2 {
     output:
     tuple val(id), path("${id}.kraken2.report"), emit: report
     tuple val(id), path("${id}.kraken2.mpa"), emit: mpa
+    tuple val(id), path("${id}." + params.classified_out.replaceAll("#", "_1")), optional: true
+    tuple val(id), path("${id}." + params.classified_out.replaceAll("#", "_2")), optional: true
+    tuple val(id), path("${id}." + params.unclassified_out.replaceAll("#", "_1")), optional: true
+    tuple val(id), path("${id}." + params.unclassified_out.replaceAll("#", "_2")), optional: true
 
     script:
     input = params.single_end ? "\"$reads\"" :  "--paired \"${reads[0]}\" \"${reads[1]}\""
     report_zero_counts = params.report_zero_counts ? "--report-zero-counts" : ""
-    classified_reads = params.classified_out ? "--classified-out " + params.outdir + "/${id}_" + params.classified_out : ""
-    unclassified_reads = params.unclassified_out ? "--unclassified-out " + params.outdir + "/${id}_" + params.unclassified_out : ""
+    classified_reads = params.classified_out ? "--classified-out ${id}." + params.classified_out : ""
+    unclassified_reads = params.unclassified_out ? "--unclassified-out ${id}." + params.unclassified_out : ""
 
     """
     kraken2 \
